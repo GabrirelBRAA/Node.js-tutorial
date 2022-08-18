@@ -4,13 +4,25 @@ require("dotenv").config()
 
 
 
-app.use(function Meme3  (req, res, next){
+app.use(function rootLogger(req, res, next){
     let method = req.method;
     let ip = req.ip;
     let path = req.path;
     console.log(method + " " + path + " - " + ip);
     next();
 
+})
+
+app.get("/now", function timeNow(req, res, next){
+    req.time = new Date().toString()
+    next()
+
+}, function(req, res){
+    res.json({"time":req.time})
+})
+
+app.get("/:word/echo", function echoWord(req, res){
+    res.json({"echo":req.params.word})
 })
 
 
