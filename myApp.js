@@ -1,6 +1,8 @@
 let express = require('express');
+const { userPassedConsoleChallenge } = require('fcc-express-bground/globals');
 let app = express();
 require("dotenv").config()
+var bodyParser = require("body-parser")
 
 
 
@@ -12,6 +14,7 @@ app.use(function rootLogger(req, res, next){
     next();
 
 })
+app.use(bodyParser.urlencoded({extended: false}))
 
 app.get("/now", function timeNow(req, res, next){
     req.time = new Date().toString()
@@ -42,7 +45,19 @@ function Meme2(req, res){
      }
 }
 
+function name(req, res){
+    if (req.method=="GET"){
+    var first = req.query["first"]
+    var  lastname = req.query["last"]
+} else if (req.method == "POST"){
+    var first = req.body["first"]
+    var  lastname = req.body["last"]
+}
+        res.json({"name":first + " " + lastname})
+}
 
+app.get("/name", name)
+app.post("/name", name)
 app.get("/",Meme)
 app.get("/json", Meme2)
 
